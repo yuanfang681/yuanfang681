@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>天平找球挑战-最终版</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        #game-rules {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .ball {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(145deg, #666, #444);
+            border-radius: 50%;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            cursor: move;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .ball-value {
+            font-size: 10px;
+            color: #ffeb3b;
+            position: absolute;
+            bottom: 2px;
+        }
+
+        .balance-container {
+            margin: 40px 0;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .balance {
+            display: inline-flex;
+            align-items: center;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .beam {
+            width: 300px;
+            height: 6px;
+            background: #795548;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .beam::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            background: #795548;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -60px;
+            border-radius: 4px;
+        }
+
+        .pan {
+            min-width: 160px;
+            min-height: 120px;
+            border: 3px solid #795548;
+            margin: 0 30px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: flex-start;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 5px;
+        }
+
+        .result-pan {
+            width: 140px;
+            height: 140px;
+            border: 3px solid;
+            margin: 20px;
+            display: inline-block;
+            position: relative;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .pan-label {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            z-index: 1;
+        }
+
+        .ball-container {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .light-pan { border-color: #FF9800; color: #FF9800; }
+        .heavy-pan { border-color: #F44336; color: #F44336; }
+
+        #balls {
+            text-align: center;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+
+        button {
+            padding: 12px 24px;
+            margin: 10px;
+            border: none;
+            border-radius: 25px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        #weigh-result {
+            font-size: 18px;
+            color: #666;
+            margin: 15px;
+            min-height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h2>找出异常小球挑战</h2>
+    
+    <div id="game-rules">
+        <h3>游戏规则：</h3>
+        <ul>
+            <li>🎮 12个小球中有1个异常球（可能更轻或更重）</li>
+            <li>⚖️ 使用天平最多称重3次找出异常球</li>
+            <li>🖱️ 拖动小球到天平两侧进行称重</li>
+            <li>🔙 点击"小球归位"按钮可重置所有球的位置</li>
+            <li>✅ 将判断结果放入对应托盘后提交验证</li>
+        </ul>
+    </div>
+
+    <div id="balls"></div>
+
+    <div class="balance-container">
+        <div class="balance">
+            <div class="pan left-pan" ondrop="drop(event)" ondragover="allowDrop(event)">左盘</div>
+            <div class="beam"></div>
+            <div class="pan right-pan" ondrop="drop(event)" ondragover="allowDrop(event)">右盘</div>
+        </div>
+    </div>
+
+    <div style="text-align: center;">
+        <button onclick="resetBalls()" style="background: var(--secondary-color);">🔙 小球归位</button>
+        <button id="weigh" onclick="weigh()">⚖️ 称重（剩余次数：3）</button>
+        <div id="weigh-result"></div>
+    </div>
+
+    <div id="result-containers" style="text-align: center; margin: 30px;">
+        <h3 style="color: #666;">结果验证区：</h3>
+        <div class="result-pan light-pan" ondrop="dropResult(event)" ondragover="allowDrop(event)">
+            <div class="ball-container"></div>
+            <div class="pan-label">轻</div>
+        </div>
+        <div class="result-pan heavy-pan" ondrop="dropResult(event)" ondragover="allowDrop(event)">
+            <div class="ball-container"></div>
+            <div class="pan-label">重</div>
+        </div>
+        <br>
+        <button onclick="submitResult()" style="background: #9C27B0;">✅ 提交答案</button>
+    </div>
+
+    <script>
+        let abnormalBall = null;
+        let remainingAttempts = 3;
+        let isHeavy = false;
+        const originalBalls = new Map();
+
+        function initGame() {
+            const ballsContainer = document.getElementById('balls');
+            ballsContainer.innerHTML = '';
+            originalBalls.clear();
+
+            const index = Math.floor(Math.random() * 12);
+            isHeavy = Math.random() < 0.5;
+
+            for(let i = 0; i < 12; i++) {
+                const ball = document.createElement('div');
+                ball.className = 'ball';
+                ball.draggable = true;
+                
+                ball.innerHTML = `
+                    <div>${i + 1}</div>
+                    
+                `;
+
+                ball.id = `ball-${i+1}`;
+
+                if(i === index) {
+                    ball.dataset.abnormal = 'true';
+                    ball.dataset.ballType = isHeavy ? 'heavy' : 'light';
+                    abnormalBall = ball;
+                } else {
+                    ball.dataset.abnormal = 'false';
+                }
+
+                originalBalls.set(ball.id, ball);
+                ball.addEventListener('dragstart', dragStart);
+                ball.addEventListener('dragend', dragEnd);
+                ballsContainer.appendChild(ball);
+            }
+        }
+
+        let draggedBall = null;
+
+        function dragStart(e) {
+            draggedBall = e.target;
+            e.target.classList.add('dragging');
+        }
+
+        function dragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function allowDrop(e) {
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const target = e.target.closest('.pan, #balls');
+            if (!target) return;
+
+            if(target.id === 'balls') {
+                if(!document.getElementById(draggedBall.id)) {
+                    const original = originalBalls.get(draggedBall.id);
+                    const clone = original.cloneNode(true);
+                    clone.addEventListener('dragstart', dragStart);
+                    clone.addEventListener('dragend', dragEnd);
+                    target.appendChild(clone);
+                }
+                return;
+            }
+
+            const existing = Array.from(target.children).find(
+                child => child.textContent === draggedBall.textContent
+            );
+            
+            if(!existing) {
+                const clone = draggedBall.cloneNode(true);
+                clone.addEventListener('dragstart', dragStart);
+                clone.addEventListener('dragend', dragEnd);
+                target.appendChild(clone);
+            }
+        }
+
+        function resetBalls() {
+            document.querySelectorAll('.pan, .ball-container').forEach(container => {
+                container.innerHTML = '';
+            });
+
+            const ballsContainer = document.getElementById('balls');
+            ballsContainer.innerHTML = '';
+            originalBalls.forEach(ball => {
+                const clone = ball.cloneNode(true);
+                clone.addEventListener('dragstart', dragStart);
+                clone.addEventListener('dragend', dragEnd);
+                ballsContainer.appendChild(clone);
+            });
+
+            document.querySelector('.balance').style.transform = 'rotate(0deg)';
+            document.getElementById('weigh-result').textContent = '';
+        }
+
+        function calculateWeight(pan) {
+            return Array.from(pan.children).reduce((sum, ball) => {
+                if(ball.dataset.abnormal === 'true') {
+                    return ball.dataset.ballType === 'heavy' ? sum + 2 : sum + 0.5;
+                }
+                return sum + 1;
+            }, 0);
+        }
+
+        function weigh() {
+            if(remainingAttempts <= 0) return;
+
+            const leftPan = document.querySelector('.left-pan');
+            const rightPan = document.querySelector('.right-pan');
+            const balance = document.querySelector('.balance');
+
+            const leftWeight = calculateWeight(leftPan);
+            const rightWeight = calculateWeight(rightPan);
+
+            let angle = 0;
+            const maxAngle = 15;
+            
+            if(leftWeight > rightWeight) {
+                angle = -Math.min(maxAngle, (leftWeight - rightWeight) * 6);
+            } else if(leftWeight < rightWeight) {
+                angle = Math.min(maxAngle, (rightWeight - leftWeight) * 6);
+            }
+
+            balance.style.transform = `rotate(${angle}deg)`;
+
+            let result = '';
+            if(leftWeight > rightWeight) {
+                result = '⚖️ 左侧更重';
+            } else if(leftWeight < rightWeight) {
+                result = '⚖️ 右侧更重';
+            } else {
+                result = '⚖️ 天平平衡';
+            }
+
+            remainingAttempts--;
+            document.getElementById('weigh').innerHTML = `⚖️ 称重（剩余次数：${remainingAttempts}）`;
+            document.getElementById('weigh-result').innerHTML = result;
+
+            if(remainingAttempts === 0) {
+                document.getElementById('weigh').disabled = true;
+            }
+        }
+
+        function dropResult(e) {
+            e.preventDefault();
+            const resultPan = e.target.closest('.result-pan');
+            if (!resultPan) return;
+
+            const original = originalBalls.get(draggedBall.id);
+            if (!original) return;
+
+            const ballContainer = resultPan.querySelector('.ball-container');
+            ballContainer.innerHTML = '';
+            
+            const clone = original.cloneNode(true);
+            clone.style.transform = 'scale(0.8)';
+            clone.style.cursor = 'pointer';
+            clone.dataset.abnormal = original.dataset.abnormal;
+            clone.dataset.ballType = original.dataset.ballType;
+            clone.addEventListener('dragstart', dragStart);
+            clone.addEventListener('dragend', dragEnd);
+            
+            ballContainer.appendChild(clone);
+        }
+
+        function submitResult() {
+            const lightPan = document.querySelector('.light-pan');
+            const heavyPan = document.querySelector('.heavy-pan');
+            const lightBall = lightPan.querySelector('.ball');
+            const heavyBall = heavyPan.querySelector('.ball');
+
+            if (!lightBall && !heavyBall) {
+                alert('⚠️ 请至少放入一个结果盘！');
+                return;
+            }
+
+            let isCorrect = false;
+            const expectedType = abnormalBall.dataset.ballType;
+
+            if (lightBall?.dataset.abnormal === 'true') {
+                isCorrect = lightBall.dataset.ballType === 'light' && expectedType === 'light';
+            }
+            if (heavyBall?.dataset.abnormal === 'true') {
+                isCorrect = isCorrect || (heavyBall.dataset.ballType === 'heavy' && expectedType === 'heavy');
+            }
+
+            const correctNumber = abnormalBall.querySelector('div:first-child').textContent;
+            const correctType = abnormalBall.dataset.ballType === 'heavy' ? '重' : '轻';
+
+            if (isCorrect) {
+                if(confirm('🎉 恭喜！答案正确！\n\n是否开始新游戏？')) {
+                    resetGame();
+                }
+            } else {
+                if(confirm(`❌ 答案错误！正确是 ${correctNumber} 号球（${correctType}）\n\n是否重试？`)) {
+                    resetGame();
+                }
+            }
+        }
+
+        function resetGame() {
+            document.querySelectorAll('.pan, .ball-container').forEach(container => {
+                container.innerHTML = '';
+            });
+
+            remainingAttempts = 3;
+            document.getElementById('weigh').disabled = false;
+            document.getElementById('weigh').innerHTML = '⚖️ 称重（剩余次数：3）';
+            document.querySelector('.balance').style.transform = 'rotate(0deg)';
+            document.getElementById('weigh-result').textContent = '';
+            
+            initGame();
+        }
+
+        // 初始化游戏
+        initGame();
+    </script>
+</body>
+</html>
