@@ -1,16 +1,30 @@
-## Hi there 👋
+# 
 
-<!--
-**yuanfang681/yuanfang681** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+项目编号: 7551716752603513097
 
-Here are some ideas to get you started:
+本项目是由 [网站开发专家](https://space.coze.cn/) 创建.
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+[**项目地址**](https://space.coze.cn/task/7551716752603513097)
+
+## 本地开发
+
+### 环境准备
+
+- 安装 [Node.js](https://nodejs.org/en)
+- 安装 [pnpm](https://pnpm.io/installation)
+
+### 操作步骤
+
+- 安装依赖
+
+```sh
+pnpm install
+```
+
+- 启动 Dev Server
+
+```sh
+pnpm run dev
+```
+
+- 在浏览器访问 http://localhost:3000
