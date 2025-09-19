@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>圆方魔方俱乐部 - 释放思维潜能，探索魔方的无限可能</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#8B5CF6',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Noto Sans', 'Helvetica', 'Arial', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-gradient {
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .backdrop-blur-sm {
+        backdrop-filter: blur(4px);
+      }
+      .backdrop-blur-md {
+        backdrop-filter: blur(12px);
+      }
+    }
+  </style>
+  <style>
+    /* 基础样式 */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      line-height: 1.5;
+      font-weight: 400;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* 滚动行为 */
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    /* 动画效果 */
+    @keyframes rotateCube {
+      0% { transform: rotateX(0deg) rotateY(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .animate-rotate-cube {
+      animation: rotateCube 10s linear infinite;
+    }
+    
+    .animate-float {
+      animation: float 4s ease-in-out infinite;
+    }
+    
+    .animate-float-delay-1 {
+      animation: float 4s ease-in-out 1s infinite;
+    }
+    
+    /* 深色模式切换 */
+    .dark body {
+      background-color: #111827;
+      color: #f9fafb;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 min-h-screen flex flex-col">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent py-4">
+    <div class="container mx-auto px-4 md:px-6 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <div class="relative w-10 h-10 mr-2">
+          <div class="absolute inset-0 bg-blue-500 rounded-md transform rotate-45"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-white font-bold text-lg">魔方</span>
+          </div>
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-600 via-purple-500 to-red-500 text-transparent bg-clip-text">
+          圆方魔方俱乐部
+        </h1>
+      </div>
+      
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex items-center space-x-8">
+        <a href="#" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">首页</a>
+        <a href="#about" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">关于我们</a>
+        <a href="#courses" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">课程设置</a>
+        <a href="#teachers" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">师资力量</a>
+        <a href="#testimonials" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">学员成就</a>
+        <a href="#contact" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors">联系我们</a>
+        
+        <!-- 主题切换按钮 -->
+        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="fa fa-moon-o text-gray-600 dark:text-yellow-400 dark:hidden"></i>
+          <i class="fa fa-sun-o text-yellow-400 hidden dark:block"></i>
+        </button>
+        
+        <!-- 加入我们按钮 -->
+        <button class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 rounded-full font-medium transition-all shadow-lg hover:shadow-xl">
+          立即加入
+          <i class="fa fa-chevron-right ml-1"></i>
+        </button>
+      </nav>
+      
+      <!-- 移动端菜单按钮 -->
+      <div class="md:hidden flex items-center space-x-4">
+        <button id="mobile-theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="fa fa-moon-o text-gray-600 dark:text-yellow-400 dark:hidden"></i>
+          <i class="fa fa-sun-o text-yellow-400 hidden dark:block"></i>
+        </button>
+        
+        <button id="mobile-menu-button" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <i class="fa fa-bars text-gray-700 dark:text-gray-200"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 移动端侧边菜单 -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden hidden">
+      <div class="absolute top-0 right-0 w-64 h-full bg-white dark:bg-gray-900 shadow-xl p-4">
+        <div class="flex justify-between items-center mb-8 pt-4">
+          <h2 class="text-xl font-bold">菜单</h2>
+          <button id="close-menu-button" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <i class="fa fa-times text-gray-700 dark:text-gray-200"></i>
+          </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-4">
+          <a href="#" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 transition-colors border-b border-gray-100 dark:border-gray-800">首页</a>
+          <a href="#about" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 transition-colors border-b border-gray-100 dark:border-gray-800">关于我们</a>
+          <a href="#courses" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 transition-colors border-b border-gray-100 dark:border-gray-800">课程设置</a>
+          <a href="#teachers" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 transition-colors border-b border-gray-100 dark:border-gray-800">师资力量</a>
+          <a href="#testimonials" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 transition-colors border-b border-gray-100 dark:border-gray-800">学员成就</a>
+          <a href="#contact" class="text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium py-2 transition-colors border-b border-gray-100 dark:border-gray-800">联系我们</a>
+          
+          <button class="mt-4 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-3 rounded-lg font-medium transition-all shadow-lg">
+            立即加入
+            <i class="fa fa-chevron-right ml-1"></i>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主要内容 -->
+  <main class="flex-grow">
+    <!-- 英雄区域 -->
+    <section class="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
+      <!-- 背景装饰 -->
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="absolute top-20 -right-32 w-96 h-96 bg-blue-200 dark:bg-blue-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+        <div class="absolute bottom-20 -left-32 w-96 h-96 bg-purple-200 dark:bg-purple-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-70"></div>
+      </div>
+      
+      <div class="container mx-auto px-4 md:px-6 relative z-10">
+        <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+          {/* 左侧文本内容 */}
+          <div class="w-full lg:w-1/2 space-y-8">
+            <div>
+              <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                <span class="bg-gradient-to-r from-blue-600 via-purple-500 to-red-500 text-transparent bg-clip-text">
+                  释放思维潜能
+                </span>
+                <br />探索魔方的无限可能
+              </h1>
+              <p class="text-xl text-gray-600 dark:text-gray-300 max-w-lg">
+                圆方魔方俱乐部，让每一位爱好者都能掌握魔方技巧，提升思维能力，结交志同道合的朋友。
+              </p>
+            </div>
+            
+            {/* 特色列表 */}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex items-start space-x-3 p-3 rounded-lg bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm shadow-sm">
+                <div class="mt-0.5"><i class="fa fa-star text-yellow-500 text-lg"></i></div>
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-white">专业教练</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">国际认证教练团队</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3 p-3 rounded-lg bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm shadow-sm">
+                <div class="mt-0.5"><i class="fa fa-trophy text-blue-500 text-lg"></i></div>
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-white">竞赛成绩</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">多次获得省市比赛奖项</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3 p-3 rounded-lg bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm shadow-sm">
+                <div class="mt-0.5"><i class="fa fa-clock-o text-green-500 text-lg"></i></div>
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-white">灵活课程</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">根据学员水平定制课程</p>
+                </div>
+              </div>
+              <div class="flex items-start space-x-3 p-3 rounded-lg bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm shadow-sm">
+                <div class="mt-0.5"><i class="fa fa-users text-purple-500 text-lg"></i></div>
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-white">社区氛围</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-300">活跃的魔方爱好者社区</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* 按钮组 */}
+            <div class="flex flex-wrap gap-4 pt-4">
+              <button class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all shadow-lg hover:shadow-xl">
+                了解课程
+                <i class="fa fa-chevron-right ml-1"></i>
+              </button>
+              <button class="bg-white dark:bg-gray-800 text-gray-800 dark:text-white border border-gray-200 dark:border-gray-700 px-6 py-3 rounded-full font-medium transition-all shadow-md hover:shadow-lg">
+                联系我们
+              </button>
+            </div>
+          </div>
+          
+          {/* 右侧魔方图形 */}
+          <div class="w-full lg:w-1/2 relative">
+            {/* 主魔方图像 */}
+            <div class="relative mx-auto w-64 h-64 md:w-80 md:h-80">
+              <div class="absolute inset-0 animate-rotate-cube">
+                <img 
+                  src="https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=magic%20cube%20rotating%20with%20bright%20colors%203D%20rendering&sign=9b86cd24c26bbfbbbd5c5c11198c9e2c" 
+                  alt="旋转的魔方" 
+                  class="w-full h-full object-contain rounded-2xl shadow-2xl"
+                />
+              </div>
+              
+              {/* 装饰性小方块 */}
+              <div class="absolute -top-10 -right-10 w-24 h-24 bg-red-500 rounded-md"></div>
+              <div class="absolute -bottom-6 -left-6 w-16 h-16 bg-blue-500 rounded-md"></div>
+            </div>
+            
+            {/* 浮动卡片 */}
+            <div class="absolute top-1/4 -left-12 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg animate-float">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
+                  <i class="fa fa-star text-yellow-500"></i>
+                </div>
+                <span class="font-medium text-sm">1000+ 学员</span>
+              </div>
+            </div>
+            
+            <div class="absolute bottom-1/4 -right-12 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg animate-float-delay-1">
+              <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                  <i class="fa fa-trophy text-green-500"></i>
+                </div>
+                <span class="font-medium text-sm">50+ 奖项</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* 合作伙伴标志 */}
+        <div class="mt-24">
+          <p class="text-center text-sm text-gray-500 dark:text-gray-400 mb-6">合作机构</p>
+          <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+            <div class="text-gray-400 dark:text-gray-500 font-medium text-lg bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-full w-24 h-12 flex items-center justify-center">
+              伙伴1
+            </div>
+            <div class="text-gray-400 dark:text-gray-500 font-medium text-lg bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-full w-24 h-12 flex items-center justify-center">
+              伙伴2
+            </div>
+            <div class="text-gray-400 dark:text-gray-500 font-medium text-lg bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-full w-24 h-12 flex items-center justify-center">
+              伙伴3
+            </div>
+            <div class="text-gray-400 dark:text-gray-500 font-medium text-lg bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-full w-24 h-12 flex items-center justify-center">
+              伙伴4
+            </div>
+            <div class="text-gray-400 dark:text-gray-500 font-medium text-lg bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-full w-24 h-12 flex items-center justify-center">
+              伙伴5
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 特色介绍区域 */}
+    <section id="about" class="py-20 bg-white dark:bg-gray-900">
+      <div class="container mx-auto px-4 md:px-6">
+        {/* 标题部分 */}
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">为什么选择圆方魔方俱乐部？</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            我们不仅教授魔方技巧，更注重培养学员的综合能力和团队精神。
+            无论您是初学者还是有经验的爱好者，都能在这里找到适合自己的成长空间。
+          </p>
+        </div>
+        
+        {/* 特色卡片网格 */}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md mb-6">
+              <i class="fa fa-bolt text-amber-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">提升思维能力</h3>
+            <p class="text-gray-600 dark:text-gray-300">通过魔方训练，提升空间想象力、逻辑思维和解决问题的能力。</p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md mb-6">
+              <i class="fa fa-lightbulb-o text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">锻炼专注力</h3>
+            <p class="text-gray-600 dark:text-gray-300">魔方需要高度集中注意力，帮助培养专注力和耐心。</p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md mb-6">
+              <i class="fa fa-globe text-green-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">结交志同道合的朋友</h3>
+            <p class="text-gray-600 dark:text-gray-300">加入我们的社区，认识来自各地的魔方爱好者，分享心得。</p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md mb-6">
+              <i class="fa fa-star text-purple-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">专业教练指导</h3>
+            <p class="text-gray-600 dark:text-gray-300">由经验丰富的专业教练提供系统指导，快速提升技巧。</p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md mb-6">
+              <i class="fa fa-clock-o text-red-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">灵活的课程安排</h3>
+            <p class="text-gray-600 dark:text-gray-300">根据个人时间和水平，提供个性化的课程安排。</p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+            <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-2xl flex items-center justify-center shadow-md mb-6">
+              <i class="fa fa-users text-indigo-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3">丰富多彩的活动</h3>
+            <p class="text-gray-600 dark:text-gray-300">定期举办比赛、交流活动，丰富课余生活。</p>
+          </div>
+        </div>
+        
+        {/* 统计数字部分 */}
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20">
+          <div class="text-center">
+            <div class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+              5000+
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">学员人数</p>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+              50+
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">专业教练</p>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+              100+
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">获奖荣誉</p>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl md:text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2">
+              10+
+            </div>
+            <p class="text-gray-600 dark:text-gray-300">教学中心</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 课程展示区域 */}
+    <section id="courses" class="py-20 bg-gray-50 dark:bg-gray-800">
+      <div class="container mx-auto px-4 md:px-6">
+        {/* 标题部分 */}
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">我们的课程</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            针对不同年龄段和水平的学员，我们提供系统全面的魔方课程，
+            帮助您快速掌握魔方技巧，享受魔方带来的乐趣和挑战。
+          </p>
+        </div>
+        
+        {/* 课程卡片 */}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-5">
+            {/* 课程图片 */}
+            <div class="h-48 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=children%20learning%20to%20solve%20a%20rubik%27s%20cube%20with%20teacher&sign=80fed27710dc8d52424ec4a248fc5911" 
+                alt="魔方入门课程" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 课程信息 */}
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                  初级
+                </span>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <i class="fa fa-clock-o mr-1"></i>
+                  8课时
+                </div>
+              </div>
+              
+              <h3 class="text-xl font-semibold mb-2">魔方入门课程</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                适合零基础的学员，从认识魔方开始，学习基础的还原方法。
+              </p>
+              
+              {/* 课程特色 */}
+              <ul class="mb-6 space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">认识魔方结构与基础术语</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">掌握三阶魔方基础还原方法</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">了解魔方的基本原理</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">培养空间思维能力</span>
+                </li>
+              </ul>
+              
+              {/* 底部信息和按钮 */}
+              <div class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <i class="fa fa-users mr-1"></i>
+                  2000+ 学员已学习
+                </div>
+                
+                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all view-details" data-course="魔方入门课程">
+                  查看详情
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-5">
+            {/* 课程图片 */}
+            <div class="h-48 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=teenager%20solving%20a%20rubik%27s%20cube%20quickly&sign=022dec84f66d2d3a22e4dca705dedbd6" 
+                alt="进阶提高课程" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 课程信息 */}
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                  中级
+                </span>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <i class="fa fa-clock-o mr-1"></i>
+                  15课时
+                </div>
+              </div>
+              
+              <h3 class="text-xl font-semibold mb-2">进阶提高课程</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                适合已掌握基础还原方法，希望提高速度和学习更多技巧的学员。
+              </p>
+              
+              {/* 课程特色 */}
+              <ul class="mb-6 space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">学习CFOP高级还原法</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">提高还原速度至40秒内</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">学习手指灵活度训练</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">掌握常见错误的修正方法</span>
+                </li>
+              </ul>
+              
+              {/* 底部信息和按钮 */}
+              <div class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <i class="fa fa-users mr-1"></i>
+                  1200+ 学员已学习
+                </div>
+                
+                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all view-details" data-course="进阶提高课程">
+                  查看详情
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-5">
+            {/* 课程图片 */}
+            <div class="h-48 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=rubik%27s%20cube%20competition%20scene%20with%20spectators&sign=ddcd22ecd956180fcf1ae66108b30770" 
+                alt="竞赛选手课程" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 课程信息 */}
+            <div class="p-6">
+              <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                  高级
+                </span>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <i class="fa fa-clock-o mr-1"></i>
+                  32课时
+                </div>
+              </div>
+              
+              <h3 class="text-xl font-semibold mb-2">竞赛选手课程</h3>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+                为有竞赛目标的学员设计，学习专业选手的技巧和训练方法。
+              </p>
+              
+              {/* 课程特色 */}
+              <ul class="mb-6 space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">专业竞赛技巧训练</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">学习盲拧、单手拧等特殊技巧</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">比赛心理辅导</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-check-circle text-green-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">个性化训练计划制定</span>
+                </li>
+              </ul>
+              
+              {/* 底部信息和按钮 */}
+              <div class="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-gray-800">
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                  <i class="fa fa-users mr-1"></i>
+                  500+ 学员已学习
+                </div>
+                
+                <button class="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-lg font-medium transition-all view-details" data-course="竞赛选手课程">
+                  查看详情
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* 课程优势总结 */}
+        <div class="mt-20 bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-12 shadow-lg">
+          <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="md:w-1/2">
+              <h3 class="text-2xl md:text-3xl font-bold mb-4">我们的课程优势</h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-6">
+                圆方魔方俱乐部拥有丰富的教学经验和专业的师资团队，我们不仅关注学员的魔方技巧提升，
+                更注重培养学员的思维能力、专注力和解决问题的能力。
+              </p>
+              <div class="flex flex-wrap gap-3">
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-700 dark:text-gray-300">一对一辅导</span>
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-700 dark:text-gray-300">小班授课</span>
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-700 dark:text-gray-300">线上线下结合</span>
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-700 dark:text-gray-300">免费练习场地</span>
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-700 dark:text-gray-300">定期比赛活动</span>
+              </div>
+            </div>
+            
+            <div class="md:w-56 h-56 relative">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=collection%20of%20various%20rubik%27s%20cubes%20and%20puzzles&sign=5d1f27c543962b777b835f6b243852d7" 
+                alt="各种魔方集合" 
+                class="w-full h-full object-contain rounded-2xl shadow-xl"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 师资展示区域 */}
+    <section id="teachers" class="py-20 bg-white dark:bg-gray-900">
+      <div class="container mx-auto px-4 md:px-6">
+        {/* 标题部分 */}
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">专业的师资团队</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            我们拥有一支经验丰富、技术精湛的教练团队，他们不仅是魔方高手，
+            更是优秀的教育工作者，致力于帮助每一位学员发挥潜能。
+          </p>
+        </div>
+        
+        {/* 教师卡片 */}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-5">
+            {/* 教师照片 */}
+            <div class="h-64 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=professional%20rubik%27s%20cube%20coach%20male&sign=411fe441f9c95373b2c20057b728c153" 
+                alt="张明" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 教师信息 */}
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-semibold mb-1">张明</h3>
+              <p class="text-blue-600 dark:text-blue-400 text-sm mb-3">首席教练</p>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 flex-grow">
+                前全国魔方冠军，拥有10年教学经验，擅长培养竞赛选手。
+              </p>
+              
+              {/* 成就列表 */}
+              <ul class="space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">2022年全国魔方锦标赛冠军</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">WCA认证裁判</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">培养出10名省级冠军</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-5">
+            {/* 教师照片 */}
+            <div class="h-64 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=professional%20rubik%27s%20cube%20coach%20female&sign=e326efc8a70fc841fc775990b910a56c" 
+                alt="李华" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 教师信息 */}
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-semibold mb-1">李华</h3>
+              <p class="text-blue-600 dark:text-blue-400 text-sm mb-3">高级教练</p>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 flex-grow">
+                教育学硕士，专注于儿童魔方教育，教学方法生动有趣。
+              </p>
+              
+              {/* 成就列表 */}
+              <ul class="space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">儿童教育专家</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">出版《魔方入门教程》</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">5年青少年教学经验</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-5">
+            {/* 教师照片 */}
+            <div class="h-64 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=professional%20rubik%27s%20cube%20coach%20male&sign=411fe441f9c95373b2c20057b728c153" 
+                alt="王强" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 教师信息 */}
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-semibold mb-1">王强</h3>
+              <p class="text-blue-600 dark:text-blue-400 text-sm mb-3">技术教练</p>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 flex-grow">
+                擅长高阶魔方和特殊魔方教学，前亚洲魔方锦标赛选手。
+              </p>
+              
+              {/* 成就列表 */}
+              <ul class="space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">亚洲魔方锦标赛前10名</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">擅长五阶魔方和盲拧</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">创新教学方法研发者</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col hover:-translate-y-5">
+            {/* 教师照片 */}
+            <div class="h-64 overflow-hidden">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=portrait_4_3&prompt=kindergarten%20teacher%20teaching%20children%20rubik%27s%20cube&sign=48b71974caacc98c8e227741a69677fb" 
+                alt="刘芳" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+              />
+            </div>
+            
+            {/* 教师信息 */}
+            <div class="p-6 flex-grow flex flex-col">
+              <h3 class="text-xl font-semibold mb-1">刘芳</h3>
+              <p class="text-blue-600 dark:text-blue-400 text-sm mb-3">启蒙教练</p>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 flex-grow">
+                专注于低龄儿童魔方启蒙教育，善于激发孩子的学习兴趣。
+              </p>
+              
+              {/* 成就列表 */}
+              <ul class="space-y-2">
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">幼儿教育专家</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">趣味教学法创始人</span>
+                </li>
+                <li class="flex items-start text-sm">
+                  <i class="fa fa-trophy text-yellow-500 mr-2 mt-0.5"></i>
+                  <span class="text-gray-600 dark:text-gray-300">已培养3000+儿童学员</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        {/* 教学优势 */}
+        <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+            <div class="bg-gray-100 dark:bg-gray-700 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+              <i class="fa fa-trophy text-yellow-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">专业认证</h3>
+            <p class="text-gray-600 dark:text-gray-300">所有教练均持有WCA认证或相关教学资格证书</p>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+            <div class="bg-gray-100 dark:bg-gray-700 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+              <i class="fa fa-users text-blue-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">个性化教学</h3>
+            <p class="text-gray-600 dark:text-gray-300">根据学员特点制定个性化教学计划，因材施教</p>
+          </div>
+          
+          <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md border border-gray-100 dark:border-gray-700">
+            <div class="bg-gray-100 dark:bg-gray-700 w-16 h-16 rounded-full flex items-center justify-center mb-4">
+              <i class="fa fa-clock-o text-green-500 text-2xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">丰富经验</h3>
+            <p class="text-gray-600 dark:text-gray-300">团队平均教学经验超过5年，培养学员超过10000名</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 学员评价区域 */}
+    <section id="testimonials" class="py-20 bg-gray-50 dark:bg-gray-800">
+      <div class="container mx-auto px-4 md:px-6">
+        {/* 标题部分 */}
+        <div class="text-center max-w-3xl mx-auto mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">学员成就与评价</h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300">
+            看看我们的学员们在圆方魔方俱乐部的学习成果和真实感受，
+            他们的成长和进步是我们最大的动力。
+          </p>
+        </div>
+        
+        {/* 评价轮播 */}
+        <div class="relative max-w-4xl mx-auto">
+          {/* 轮播内容 */}
+          <div class="bg-white dark:bg-gray-900 rounded-2xl p-8 md:p-12 shadow-xl border border-gray-100 dark:border-gray-700">
+            <div id="testimonial-content" class="flex flex-col md:flex-row items-center gap-8">
+              {/* 学员照片 */}
+              <div class="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-blue-100 dark:border-blue-900/30 shadow-lg">
+                <img 
+                  src="https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=happy%20young%20boy%20holding%20a%20rubik%27s%20cube&sign=a90f7bf9c03e1fa1557db3fe60a821f4" 
+                  alt="李明" 
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* 评价内容 */}
+              <div class="flex-1 text-center md:text-left">
+                <div class="flex justify-center md:justify-start">
+                  <i class="fa fa-star text-yellow-400"></i>
+                  <i class="fa fa-star text-yellow-400"></i>
+                  <i class="fa fa-star text-yellow-400"></i>
+                  <i class="fa fa-star text-yellow-400"></i>
+                  <i class="fa fa-star text-yellow-400"></i>
+                </div>
+                <p class="mt-4 text-xl text-gray-700 dark:text-gray-200 italic">
+                  "在圆方魔方俱乐部学习了半年，我的魔方水平从零基础提升到了能在20秒内还原三阶魔方。教练们非常有耐心，教学方法也很科学，让我在短时间内取得了很大进步。"
+                </p>
+                <div class="mt-6">
+                  <h4 class="text-lg font-semibold">李明</h4>
+                  <p class="text-gray-500 dark:text-gray-400 text-sm">
+                    12岁 | 入门到竞赛选手
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* 轮播控制按钮 */}
+          <button id="prev-testimonial" class="absolute top-1/2 -left-4 md:left-0 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+          <button id="next-testimonial" class="absolute top-1/2 -right-4 md:right-0 transform -translate-y-1/2 w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </div>
+        
+        {/* 指示器 */}
+        <div class="flex justify-center mt-8 gap-2">
+          <button class="w-8 h-3 rounded-full bg-blue-500 transition-all duration-300 testimonial-dot" data-index="0"></button>
+          <button class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 testimonial-dot" data-index="1"></button>
+          <button class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 testimonial-dot" data-index="2"></button>
+          <button class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600 transition-all duration-300 testimonial-dot" data-index="3"></button>
+        </div>
+        
+        {/* 竞赛成就 */}
+        <div class="mt-20">
+          <h3 class="text-2xl md:text-3xl font-bold text-center mb-12">竞赛成就</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:-translate-y-5 transition-all duration-300">
+              <div class="h-48 overflow-hidden">
+                <img 
+                  src="https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=rubik%27s%20cube%20competition%20with%20trophy%20and%20medals&sign=a589e9ceb594c8bbf61ead9f25243470" 
+                  alt="2023年全国青少年魔方锦标赛" 
+                  class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div class="p-6">
+                <h4 class="text-lg font-semibold mb-4">2023年全国青少年魔方锦标赛</h4>
+                <ul class="space-y-2">
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">儿童组三阶冠军</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">少年组四阶亚军</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">团体总分第三名</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:-translate-y-5 transition-all duration-300">
+              <div class="h-48 overflow-hidden">
+                <img 
+                  src="https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=young%20people%20competing%20in%20rubik%27s%20cube%20tournament&sign=392ff65500282064b269d0c8ece50c22" 
+                  alt="2024年省魔方公开赛" 
+                  class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div class="p-6">
+                <h4 class="text-lg font-semibold mb-4">2024年省魔方公开赛</h4>
+                <ul class="space-y-2">
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">少年组三阶冠军</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">三阶盲拧冠军</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">团体总冠军</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:-translate-y-5 transition-all duration-300">
+              <div class="h-48 overflow-hidden">
+                <img 
+                  src="https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_4_3&prompt=international%20rubik%27s%20cube%20competition%20scene&sign=3ea3527705b941e082f69c9e08d0ebf6" 
+                  alt="2024年亚洲魔方邀请赛" 
+                  class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                />
+              </div>
+              <div class="p-6">
+                <h4 class="text-lg font-semibold mb-4">2024年亚洲魔方邀请赛</h4>
+                <ul class="space-y-2">
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">青少年组前10名</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">最佳新人奖</span>
+                  </li>
+                  <li class="flex items-start">
+                    <i class="fa fa-star text-yellow-500 mr-2 mt-1"></i>
+                    <span class="text-gray-600 dark:text-gray-300">体育道德风尚奖</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* 联系我们区域 */}
+    <section id="contact" class="py-20 bg-white dark:bg-gray-900">
+      <div className="container mx-auto px-4 md:px-6">
+        {/* 标题部分 */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">联系我们</h2>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            无论您有任何问题或建议，都可以通过以下方式联系我们，
+            我们的工作人员会在24小时内回复您。
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* 联系信息 */}
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-8 shadow-lg h-full"><h3 className="text-2xl font-semibold mb-6">联系方式</h3>
+            
+            <div className="space-y-6">
+              <div className="flex items-start">
+                <div className="bg-blue-100 dark:bg-blue-900/30 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fa fa-map-marker text-blue-600 dark:text-blue-400 text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-lg font-medium mb-1">地址</h4>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    河北省霸州市宋庄欣园小区
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-green-100 dark:bg-green-900/30 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fa fa-phone text-green-600 dark:text-green-400 text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-lg font-medium mb-1">招生电话</h4>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    15512629186
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-red-100 dark:bg-red-900/30 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fa fa-envelope text-red-600 dark:text-red-400 text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-lg font-medium mb-1">邮箱</h4>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    296874166@qq.com
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-purple-100 dark:bg-purple-900/30 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                  <i class="fa fa-clock-o text-purple-600 dark:text-purple-400 text-xl"></i>
+                </div>
+                <div className="ml-4">
+                  <h4 className="text-lg font-medium mb-1">上课时间</h4>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    周六下午2：00-3:30
+                  </p>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    周日下午2:00-3:30
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* 社交媒体 */}
+            <div className="mt-10">
+              <h4 className="text-lg font-medium mb-4">关注我们</h4>
+              <div className="flex space-x-4">
+                <a href="#" className="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+                  <i class="fa fa-facebook"></i>
+                </a>
+                <a href="#" className="bg-blue-400 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+                  <i class="fa fa-twitter"></i>
+                </a>
+                <a href="#" className="bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+                  <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" className="bg-red-600 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+                  <i class="fa fa-youtube-play"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          {/* 联系表单 */}
+          <div className="bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700 h-full">
+            <h3 className="text-2xl font-semibold mb-6">发送消息</h3>
+            
+            <form id="contact-form" className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    姓名
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="请输入您的姓名"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    邮箱
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    placeholder="请输入您的邮箱"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  电话
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="请输入您的电话"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  留言
+                </label>
+                <textarea id="message"
+                  name="message"
+                  required
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none"
+                  placeholder="请输入您的留言内容"
+                ></textarea>
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
+              >
+                发送消息
+              </button>
+            </form>
+            
+            {/* 地图 */}
+            <div className="mt-8 rounded-xl overflow-hidden h-64 border border-gray-200 dark:border-gray-700">
+              <img 
+                src="https://space.coze.cn/api/coze_space/gen_image?image_size=landscape_16_9&prompt=modern%20indoor%20rubik%27s%20cube%20club%20interior&sign=b2d8b5e18c1c577903e417296bb18d57" 
+                alt="俱乐部环境" 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  {/* 页脚 */}
+  <footer className="bg-gray-900 text-white pt-16 pb-8">
+    <div className="container mx-auto px-4 md:px-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        {/* 俱乐部简介 */}
+        <div>
+          <div className="flex items-center mb-6">
+            <div className="relative w-10 h-10 mr-2">
+              <div className="absolute inset-0 bg-blue-500 rounded-md transform rotate-45"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-white font-bold text-lg">魔方</span>
+              </div>
+            </div>
+            <h2 className="text-xl font-bold text-white">圆方魔方俱乐部</h2>
+          </div>
+          
+          <p className="text-gray-400 mb-6">
+            圆方魔方俱乐部致力于为魔方爱好者提供专业的教学和交流平台，
+            培养学员的思维能力和解决问题的能力。
+          </p>
+          
+          <div className="flex space-x-4">
+            <a href="#" className="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+              <i class="fa fa-facebook"></i>
+            </a>
+            <a href="#" className="bg-blue-400 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a href="#" className="bg-pink-600 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+              <i class="fa fa-instagram"></i>
+            </a>
+            <a href="#" className="bg-red-600 w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity">
+              <i class="fa fa-youtube-play"></i>
+            </a>
+          </div>
+        </div>
+        
+        {/* 快速链接 */}
+        <div>
+          <h3 className="text-lg font-semibold mb-6">快速链接</h3>
+          <ul className="space-y-3">
+            <li>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center">
+                <i class="fa fa-chevron-right mr-2"></i>
+                首页
+              </a>
+            </li>
+            <li>
+              <a href="#about" className="text-gray-400 hover:text-white transition-colors flex items-center">
+                <i class="fa fa-chevron-right mr-2"></i>
+                关于我们
+              </a>
+            </li>
+            <li>
+              <a href="#courses" className="text-gray-400 hover:text-white transition-colors flex items-center">
+                <i class="fa fa-chevron-right mr-2"></i>
+                课程设置
+              </a>
+            </li>
+            <li>
+              <a href="#teachers" className="text-gray-400 hover:text-white transition-colors flex items-center">
+                <i class="fa fa-chevron-right mr-2"></i>
+                师资力量
+              </a>
+            </li>
+            <li>
+              <a href="#testimonials" className="text-gray-400 hover:text-white transition-colors flex items-center">
+                <i class="fa fa-chevron-right mr-2"></i>
+                学员成就
+              </a>
+            </li>
+            <li>
+              <a href="#contact" className="text-gray-400 hover:text-white transition-colors flex items-center">
+                <i class="fa fa-chevron-right mr-2"></i>
+                联系我们
+              </a>
+            </li>
+          </ul>
+        </div>
+        
+        {/* 联系方式 */}
+        <div>
+          <h3 className="text-lg font-semibold mb-6">联系方式</h3>
+          <ul className="space-y-4">
+            <li className="flex items-start">
+              <i class="fa fa-map-marker text-blue-400 mr-3 mt-0.5"></i>
+              <span className="text-gray-400">河北省霸州市宋庄欣园小区</span>
+            </li>
+            <li className="flex items-start">
+              <i class="fa fa-phone text-blue-400 mr-3 mt-0.5"></i>
+              <span className="text-gray-400">15512629186</span>
+            </li>
+            <li className="flex items-start">
+              <i class="fa fa-envelope text-blue-400 mr-3 mt-0.5"></i>
+              <span className="text-gray-400">296874166@qq.com</span>
+            </li>
+            <li className="flex items-start">
+              <i class="fa fa-clock-o text-blue-400 mr-3 mt-0.5"></i>
+              <span className="text-gray-400">
+                上课时间：周六下午2：00-3:30 周日下午2:00-3:30
+              </span>
+            </li>
+          </ul>
+        </div>
+        
+        {/* 订阅 */}
+        <div>
+          <h3 className="text-lg font-semibold mb-6">订阅我们</h3>
+          <p className="text-gray-400 mb-4">
+            订阅我们的新闻通讯，获取最新的课程信息和活动通知。
+          </p>
+          <form className="mb-4">
+            <div className="flex">
+              <input
+                type="email"
+                placeholder="您的邮箱地址"
+                className="flex-1 px-4 py-3 rounded-l-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-r-lg transition-colors"
+              >
+                订阅
+              </button>
+            </div>
+          </form>
+          <p className="text-sm text-gray-500">
+            我们尊重您的隐私，不会向第三方分享您的信息。
+          </p>
+        </div>
+      </div>
+      
+      {/* 底部版权信息 */}
+      <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
+        <p className="text-gray-500 text-sm mb-4 md:mb-0">
+          © 2024 圆方魔方俱乐部. 保留所有权利.
+        </p>
+        <div className="flex items-center space-x-4">
+          <button id="footer-theme-toggle" className="p-2 rounded-full hover:bg-gray-800 transition-colors">
+            <i class="fa fa-moon-o text-gray-300 dark:hidden"></i>
+            <i class="fa fa-sun-o text-yellow-400 hidden dark:block"></i>
+          </button>
+          <a href="#" className="text-gray-500 hover:text-white text-sm transition-colors">隐私政策</a>
+          <a href="#" className="text-gray-500 hover:text-white text-sm transition-colors">服务条款</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  {/* 提示弹窗 */}
+  <div id="toast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg opacity-0 transition-opacity duration-300 flex items-center">
+    <i class="fa fa-check-circle mr-2"></i>
+    <span id="toast-message">操作成功！</span>
+  </div>
+
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        navbar.classList.add('bg-white/90', 'dark:bg-gray-900/90', 'backdrop-blur-md', 'shadow-md', 'py-2');
+        navbar.classList.remove('bg-transparent', 'py-4');
+      } else {
+        navbar.classList.remove('bg-white/90', 'dark:bg-gray-900/90', 'backdrop-blur-md', 'shadow-md', 'py-2');
+        navbar.classList.add('bg-transparent', 'py-4');
+      }
+    });
+
+    // 移动端菜单
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const closeMenuButton = document.getElementById('close-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+    });
+
+    closeMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+    });
+
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target === mobileMenu) {
+        mobileMenu.classList.add('hidden');
+      }
+    });
+
+    // 主题切换功能
+    const themeToggle = document.getElementById('theme-toggle');
+    const mobileThemeToggle = document.getElementById('mobile-theme-toggle');
+    const footerThemeToggle = document.getElementById('footer-theme-toggle');
+    const html = document.documentElement;
+
+    // 检查本地存储中的主题偏好
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      html.classList.add(savedTheme);
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      html.classList.add('dark');
+    }
+
+    // 切换主题函数
+    function toggleTheme() {
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // 添加主题切换事件监听器
+    themeToggle.addEventListener('click', toggleTheme);
+    mobileThemeToggle.addEventListener('click', toggleTheme);
+    footerThemeToggle.addEventListener('click', toggleTheme);
+
+    // 显示提示函数
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toast-message');
+      
+      toastMessage.textContent = message;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 3000);
+    }
+
+    // 课程详情按钮点击事件
+    document.querySelectorAll('.view-details').forEach(button => {
+      button.addEventListener('click', () => {
+        const courseName = button.getAttribute('data-course');
+        showToast(`您正在查看 ${courseName}，详情请联系客服。`);
+      });
+    });
+
+    // 联系表单提交事件
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('感谢您的留言，我们会尽快与您联系！');
+        contactForm.reset();
+      });
+    }
+
+    // 学员评价轮播
+    const testimonials = [
+      {
+        id: 1,
+        name: "李明",
+        age: "12岁",
+        level: "入门到竞赛选手",
+        content: "在圆方魔方俱乐部学习了半年，我的魔方水平从零基础提升到了能在20秒内还原三阶魔方。教练们非常有耐心，教学方法也很科学，让我在短时间内取得了很大进步。",
+        rating: 5,
+        image: "https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=happy%20young%20boy%20holding%20a%20rubik%27s%20cube&sign=a90f7bf9c03e1fa1557db3fe60a821f4"
+      },
+      {
+        id: 2,
+        name: "王华",
+        age: "8岁",
+        level: "启蒙课程",
+        content: "我家孩子在这里学习了三个月，不仅学会了还原魔方，更重要的是他的专注力和逻辑思维能力有了明显提升。感谢教练们的耐心指导！",
+        rating: 5,
+        image: "https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=young%20child%20solving%20rubik%27s%20cube%20with%20smile&sign=b485f715d9ceaad984ec13fdf9503a0a"
+      },
+      {
+        id: 3,
+        name: "张伟",
+        age: "15岁",
+        level: "竞赛选手课程",
+        content: "作为一名竞赛选手，我在这里得到了专业的指导，教练针对我的特点制定了训练计划，让我的成绩从45秒提升到了15秒以内，非常感谢圆方魔方俱乐部！",
+        rating: 5,
+        image: "https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=teenager%20solving%20rubik%27s%20cube%20in%20competition&sign=5d1c737a303cfab8af7579cde3e0a5ca"
+      },
+      {
+        id: 4,
+        name: "陈静",
+        age: "9岁",
+        level: "进阶课程",
+        content: "孩子非常喜欢来这里学习，教练们寓教于乐的教学方式让孩子在愉快的氛围中学习。现在孩子不仅会还原三阶魔方，还学会了四阶魔方，自信心也提高了很多。",
+        rating: 4,
+        image: "https://space.coze.cn/api/coze_space/gen_image?image_size=square_hd&prompt=young%20girl%20with%20rubik%27s%20cube%20smiling&sign=1d202e7348ab7981ad8da9426ddf7c4b"
+      }
+    ];
+
+    let currentTestimonialIndex = 0;
+    const testimonialContent = document.getElementById('testimonial-content');
+    const prevTestimonialBtn = document.getElementById('prev-testimonial');
+    const nextTestimonialBtn = document.getElementById('next-testimonial');
+    const testimonialDots = document.querySelectorAll('.testimonial-dot');
+
+    function renderTestimonial(index) {
+      const testimonial = testimonials[index];
+      
+      // 生成星级评分HTML
+      let starsHtml = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= testimonial.rating) {
+          starsHtml += '<i class="fa fa-star text-yellow-400"></i>';
+        } else {
+          starsHtml += '<i class="fa fa-star text-gray-300 dark:text-gray-600"></i>';
+        }
+      }
+      
+      testimonialContent.innerHTML = `
+        <div class="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-blue-100 dark:border-blue-900/30 shadow-lg">
+          <img 
+            src="${testimonial.image}" 
+            alt="${testimonial.name}" 
+            class="w-full h-full object-cover"
+          />
+        </div>
+        
+        <div class="flex-1 text-center md:text-left">
+          <div class="flex justify-center md:justify-start">
+            ${starsHtml}
+          </div>
+          <p class="mt-4 text-xl text-gray-700 dark:text-gray-200 italic">
+            "${testimonial.content}"
+          </p>
+          <div class="mt-6">
+            <h4 class="text-lg font-semibold">${testimonial.name}</h4>
+            <p class="text-gray-500 dark:text-gray-400 text-sm">
+              ${testimonial.age} | ${testimonial.level}
+            </p>
+          </div>
+        </div>
+      `;
+      
+      // 更新指示器
+      testimonialDots.forEach((dot, i) => {
+        if (i === index) {
+          dot.classList.add('w-8', 'bg-blue-500');
+          dot.classList.remove('w-3', 'bg-gray-300', 'dark:bg-gray-600');
+        } else {
+          dot.classList.remove('w-8', 'bg-blue-500');
+          dot.classList.add('w-3', 'bg-gray-300', 'dark:bg-gray-600');
+        }
+      });
+    }
+
+    prevTestimonialBtn.addEventListener('click', () => {
+      currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
+      renderTestimonial(currentTestimonialIndex);
+    });
+
+    nextTestimonialBtn.addEventListener('click', () => {
+      currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+      renderTestimonial(currentTestimonialIndex);
+    });
+
+    testimonialDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        currentTestimonialIndex = index;
+        renderTestimonial(currentTestimonialIndex);
+      });
+    });
+  </script>
+</body>
+</html>
